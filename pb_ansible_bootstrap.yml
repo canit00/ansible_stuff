@@ -1,0 +1,25 @@
+---
+# this is a very basic playbook to bootstrap ansible-clients.
+
+- hosts: all
+  become: true
+  become_method: sudo
+
+  tasks:
+
+  - name: make sure bootstrap RPMs are installed RHEL5,6
+    yum: name="{{ item.pkgs }}" state=latest
+    with_items:
+    - { pkgs: 'python-simplejson' }
+    - { pkgs: 'libselinux' }
+    - { pkgs: 'libnl' }
+    - { pkgs: 'libselinux-python' }
+    when: ansible_distribution_major_version <= "6"
+
+  - name: make sure bootstrap RPMs are installed RHEL7
+    yum: name="{{ item.pkgs }}" state=latest
+    with_items:
+    - { pkgs: 'libselinux' }
+    - { pkgs: 'libnl' }
+    - { pkgs: 'libselinux-python' }
+    when: ansible_distribution_major_version == "7"
