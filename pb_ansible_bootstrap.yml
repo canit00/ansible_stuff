@@ -4,6 +4,7 @@
 #   1.) can ssh to the host(s)
 #   2.) have sudo privileges
 #   3.) RHEL systems are registered to receive packages
+# Fedora: dnf install -y ansible pyOpenSSL python-cryptography python-lxml
 
 - hosts: all
   become: true
