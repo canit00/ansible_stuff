@@ -1,0 +1,10 @@
+---
+# Ansible playbook to deploy mariadb / secure / and enable service.
+# How-to-run playbook: > ansible-playbook -l <hostname> playbooks/pb_mariadb_mysql.yaml -v --ask-vault-pass -e "custom=true datadir=/opt/mysql db_user=zenoss db_name=zenossdb"
+
+- hosts: all
+  become: true
+  become_method: sudo
+
+  roles:
+  - { role: role_mysql_mariadb_deployment }

@@ -1,0 +1,7 @@
+---
+# defaults file for mariadb
+user: mysql
+group: mysql
+datadir: "/var/lib/mysql"
+logerror: "/var/log/mariadb/mariadb.log"
+custom: False

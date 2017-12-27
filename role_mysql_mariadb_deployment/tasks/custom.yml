@@ -1,0 +1,29 @@
+- name: set optional data directory
+  file:
+    path: "{{ datadir }}"
+    mode: 0755
+    owner: "{{ user }}"
+    group: "{{ group }}"
+    state: directory
+  notify:
+  - restart mariadb
+  tags:
+  - custom
+
+- name: create custom db
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+  tags:
+  - custom
+
+# Create database user with name 'bob' and previously hashed mysql native password with all database privileges
+- mysql_user:
+    name: "{{ db_user }}"
+    host: localhost
+    password: '*EB32A99F581090C0F24F07DA74BE794438932B3A'
+    encrypted: yes
+    priv: "{{ db_name }}.*:ALL"
+    state: present
+  tags:
+  - custom

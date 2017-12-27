@@ -1,0 +1,3 @@
+---
+# vars file for mariadb
+mysql_root_passwd: !vault | <Enter vault salt here>

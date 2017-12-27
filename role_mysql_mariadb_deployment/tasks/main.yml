@@ -1,0 +1,65 @@
+---
+# tasks file for mariadb
+
+- name: install mariadb and required packages
+  yum:
+    name: "{{ item.pkgs }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - { pkgs: 'libselinux' }
+    - { pkgs: 'libnl' }
+    - { pkgs: 'libselinux-python' }
+    - { pkgs: 'MySQL-python.x86_64' }
+    - { pkgs: 'mariadb.x86_64' }
+    - { pkgs: 'mariadb-server.x86_64' }
+
+- name: enable & start mariadb
+  service:
+    name: mariadb
+    enabled: yes
+    state: restarted
+
+- name: remove anonymous user from mariadb
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+
+- name: remove the test db
+  mysql_db:
+    name: test
+    state: absent
+
+- name: remove root access from FQDN
+  mysql_user:
+    name: root
+    host: "{{ ansible_hostname }}"
+    state: absent
+
+# include custom when true
+- include: custom.yml
+  when: custom | bool
+
+- name: set security parameters + options for mariadb
+  template:
+    src: my.cnf.j2
+    dest: /etc/my.cnf
+    backup: yes
+  notify:
+  - restart mariadb
+
+# 'localhost' needs to be the last item for idempotency, see
+# http://ansible.cc/docs/modules.html#mysql-user
+- name: update mysql root password for all root accounts
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ mysql_root_passwd }}"
+  with_items:
+  - "{{ ansible_hostname }}"
+  - 127.0.0.1
+  - ::1
+  - localhost
+  tags:
+  - root
