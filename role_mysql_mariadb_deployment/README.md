@@ -22,10 +22,19 @@ Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+```
+---
+# Ansible playbook to deploy mariadb / secure / and enable service.
+# Optionally, we can deploy a specific datadir, user & db for an application which is how we want to deploy mariadb in our environment.
+# How-to-run playbook: > ansible-playbook -l <hostname> playbooks/pb_mariadb_mysql.yaml -v --ask-vault-pass -e "custom=true datadir=/opt/mysql db_user=zenoss db_name=zenossdb"
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+- hosts: all
+  become: true
+  become_method: sudo
+
+  roles:
+  - { role: role_mysql_mariadb_deployment }
+```
 
 License
 -------
