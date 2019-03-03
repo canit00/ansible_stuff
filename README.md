@@ -40,3 +40,16 @@ retry_file_save_path=~/.ansible-retry/
 ssh_args = -o ServerAliveInterval=30 -F /home/<user_id>/.ansible/ssh.config -q
 scp_if_ssh = True
 ```
+
+environmental variables:
+```
+- name: Get path
+  become: False
+  shell: |
+    echo "$PATH" 
+  args:
+    executable: /bin/bash
+  environment:
+    BASH_ENV: "{{ ansible_env['HOME'] }}/.bashrc"
+    ```
+    
