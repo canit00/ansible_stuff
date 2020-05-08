@@ -53,3 +53,8 @@ environmental variables:
     BASH_ENV: "{{ ansible_env['HOME'] }}/.bashrc"
     ```
     
+### Molecule setup RHEL 7
+subscription-manager repos --enable=rhel-7-server-rpms --enable=rhel-7-server-optional-rpms --enable=rhel-7-server-extras-rpms.
+yum install -y gcc python3-pip python3-devel openssl-devel python3-libselinux
+yum install docker device-mapper-libs device-mapper-event-libs
+yum install python-virtualenv.noarch
